@@ -1,0 +1,3791 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Описание ра,оты API",
+    "version": "1.0.0",
+    "title": "RasaERP API"
+  },
+  "basePath": "/api/v1/",
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Авторизация"
+    },
+    {
+      "name": "accounts",
+      "description": "Аккаунт пользователя"
+    },
+    {
+      "name": "admin",
+      "description": "Настройки системы со стороны администратора"
+    },
+    {
+      "name": "boards",
+      "description": "Доски"
+    },
+    {
+      "name": "clients",
+      "description": "Модуль клиентов"
+    },
+    {
+      "name": "cards",
+      "description": "Модуль клиентов"
+    },
+    {
+      "name": "modules",
+      "description": "Модуль клиентов"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth/signin": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Авторизация пользователя",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Логин пользователя",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Пароль пользователя",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/auth/restore_session": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Восстановление сессии пользователя",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountFull"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Регистрация нового пользователя",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "account",
+            "description": "Данные при регестрации",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignUp"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/auth/signout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Выход из текущего аккаунта",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/auth/change_password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Измениние пароля текущего пользователя",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "old_pass",
+            "in": "query",
+            "description": "Старый пароль",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "new_pass",
+            "in": "query",
+            "description": "Новый пароль",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}": {
+      "post": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Получение аккаунта по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Id аккаунта",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountFull"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "accounts"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "изменение данных пользователя",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Id аккаунта",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "account",
+            "description": "Данные пользователя",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AccountFormData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UpdateAvatarReply"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/lock": {
+      "post": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Ограничение/разрешение доступа пользователю",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Id аккаунта",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "post": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Создание нового пользователя",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "description": "Данные при регестрации",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AccountFormData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateUserReply"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/accounts/": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Получение списка участников (дочерних аккаунтов)",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountsList"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/avatar/": {
+      "put": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Добавление аватара по id",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json",
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Id аккаунта",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "description": "Файл изображения",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountFull"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/admin/boards/extend": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получения списка досок",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/BoardsList"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получения доски по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/BoardSingle"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Удаление доски по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/stages/": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Сохранение позиции этапа",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          },
+          {
+            "name": "column",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveColumnRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/admin/boards/crate": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Создание доски",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "column",
+            "description": "Параметры новой доски",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewColumnRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/NewColumnReply"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/admin/stages/{stageId}": {
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Сохранение колонки",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "stageId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "column",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveColumnRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/NewColumnReply"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Удаление этапа по id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "stageId",
+            "description": "Id этапа для удаления",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/transitions": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Добавление перехода карточки",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "transition",
+            "description": "Параметры перехода",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddTransitionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AddTransitionReply"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Удаление перехода карточки",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "transition",
+            "description": "Параметры перехода",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddTransitionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/subprocess": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Создание перехода на доску",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Параметры перехода",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSubprocessRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateSubprocessReply"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Создание перехода на доску",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Параметры перехода",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSubprocessRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Переход был удален"
+              ]
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/accounts": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получение доски на странице аккаутнов",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/BoardsAccounts"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/accounts/accounts_list": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получение списка аккаунтов",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AccountsList"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/accounts/active": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получение списка аккаунтов, активных на доске",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AcountsActiveList"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/transitions": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получение доски  - переход карточки",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TransitionBoard"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/subprocess": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Получение доски  - переход на доску",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SubprocessBoard"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/boards/{boardId}/modules": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Изменение доступных для пользователя модулей",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Параметры",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserModules"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserModules"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/accounts": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Добавление участника на этап",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Параметры перехода",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BoardAccountsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/BoardAccountAddReply"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Удаление участника с этапа",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Параметры пользователя для удаления",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BoardAccountsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/boards/{boardId}": {
+      "get": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Получение доски по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/GetBoardDateFilter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetBoard"
+            }
+          },
+          "400": {
+            "description": "Аккаунт не был найден"
+          }
+        }
+      }
+    },
+    "/boards/{boardId}/card/create": {
+      "put": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Создание новой карточки",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "Id доски",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "400": {
+            "description": "Ошибка"
+          }
+        }
+      }
+    },
+    "/boards/cards": {
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Сохранение списка карточек",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SaveCardsListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SaveCardsListReply"
+            }
+          },
+          "400": {
+            "description": "Ошибка"
+          }
+        }
+      }
+    },
+    "/boards/archive": {
+      "get": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Получение архива",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ArchiveReply"
+            }
+          },
+          "400": {
+            "description": "Ошибка"
+          }
+        }
+      }
+    },
+    "/boards/archive/delete": {
+      "post": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "перемещение карточек из архива в корзину",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ArchiveReply"
+            }
+          },
+          "400": {
+            "description": "Ошибка"
+          }
+        }
+      }
+    },
+    "/boards/basket": {
+      "delete": {
+        "tags": [
+          "boards"
+        ],
+        "summary": "Очистить корзину",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Ошибка"
+          }
+        }
+      }
+    },
+    "/card/{cardId}": {
+      "get": {
+        "tags": [
+          "cards"
+        ],
+        "summary": "Получение карточки по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cardId",
+            "description": "Id карточки",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "cards"
+        ],
+        "summary": "Создание карточки по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cardId",
+            "description": "Id карточки",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Cодержание карточки",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cards"
+        ],
+        "summary": "Изменение карточки по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cardId",
+            "description": "Id карточки",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "description": "Cодержание карточки",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "cards"
+        ],
+        "summary": "Удаление карточки по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cardId",
+            "description": "Id карточки",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation"
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/card/storage/{storageType}": {
+      "get": {
+        "tags": [
+          "cards"
+        ],
+        "summary": "Получение списка карточек из хранилища по типу",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "storageType",
+            "description": "Тип хранилища",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/StorageList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Список всех клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Создание нового клиента",
+        "produces": [
+          "applications/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateClientRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientDetails"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/{clientId}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Детальная информация клиента по id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "description": "Id клиента",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientDetails"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Изменение данных клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "description": "Id клиента",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UpdateClientRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientDetails"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Удаление клиента",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "description": "Id клиента",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/UpdateClientRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation"
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/employee/": {
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Создание контактного лица клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CreateEmployeeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientEmployeesList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/employee/{eployeeId}": {
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Изменение контактного лица клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eployeeId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id сотрудника"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientEmployeesList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Удаление контактного лица клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eployeeId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id сотрудника"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientEmployeesList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/{clientId}/type/": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Получение списка типов предприятий клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id сотрудника"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/OrganizationType"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Добавление нового типа предприятия клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id сотрудника"
+          },
+          {
+            "in": "body",
+            "name": "params",
+            "schema": {
+              "$ref": "#/definitions/OrganizationType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation"
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/groups": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Получение списка групп клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Создание новой группы клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupItem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Изменение группы клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "params",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupItem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/groups/{groupId}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Получение информации о группе",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id группы"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupItem"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Удаление группы клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id группы"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsGroupList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/groups/{groupId}/clients": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Получение списка контактов по группе",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id группы"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/tags/": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Получение списка тегов (цветов)",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsTagsList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/tags/{tagId}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Получение списка контактов по тегу (цвету)",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tagId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id группы"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/{clientId}/group/{groupId}": {
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Добавление клинта в группу",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id клиента"
+          },
+          {
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id группы"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation"
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/{clientId}/group/": {
+      "delete": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Удаление клинта из группы",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id клиента"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation"
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/{clientId}/relations/{relationsClientId}": {
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Добавление клиента в связи",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id клиента"
+          },
+          {
+            "in": "path",
+            "name": "relationsClientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id связанного клиента"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsRelationsList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Удаление клиента из списка связей",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id клиента"
+          },
+          {
+            "in": "path",
+            "name": "relationsClientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id связанного клиента"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientsRelationsList"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/clients/{clientId}/tags/{tagId}": {
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Добавление тега для клиента",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id клиента"
+          },
+          {
+            "in": "path",
+            "name": "tagId",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "description": "Id цвета"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ClientDetails"
+            }
+          },
+          "400": {
+            "description": "ошибка"
+          }
+        }
+      }
+    },
+    "/modules/": {
+      "get": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "Получение списка модулей",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "schema": {
+              "$ref": "#/definitions/ModulesList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "short_name": {
+          "type": "string",
+          "description": "Фамилия-инициалы",
+          "enum": [
+            "Иванов И."
+          ]
+        },
+        "full_name": {
+          "type": "string",
+          "description": "Имя пользователя для для отображения",
+          "enum": [
+            "Иванов Иван Иванович"
+          ]
+        },
+        "is_admin": {
+          "type": "boolean",
+          "default": false
+        },
+        "logo_url": {
+          "type": "string",
+          "description": "Абсолютный путь к изображению",
+          "enum": [
+            "http://google.com/..."
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя пользователя",
+          "enum": [
+            "Иван"
+          ]
+        }
+      }
+    },
+    "AccountFull": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "full_name": {
+          "type": "string",
+          "description": "Имя пользователя для для отображения",
+          "enum": [
+            "Иванов И."
+          ]
+        },
+        "birth_date": {
+          "type": "string",
+          "description": "Дата рождения",
+          "enum": [
+            "10.10.1910"
+          ]
+        },
+        "legal_person": {
+          "type": "boolean",
+          "default": false
+        },
+        "logo_url": {
+          "type": "string",
+          "description": "Абсолютный путь к изображению",
+          "enum": [
+            "http://google.com/..."
+          ]
+        },
+        "first_name": {
+          "type": "string",
+          "description": "Имя пользователя",
+          "enum": [
+            "Иван"
+          ]
+        },
+        "middle_name": {
+          "type": "string",
+          "description": "Отчество",
+          "enum": [
+            "Иванович"
+          ]
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Фамилия пользователя",
+          "enum": [
+            "Иванов"
+          ]
+        },
+        "username": {
+          "type": "string",
+          "description": "Имя пользователя",
+          "enum": [
+            "admin"
+          ]
+        },
+        "info": {
+          "type": "string",
+          "description": "Информация о пользователе"
+        },
+        "storage_rights": {
+          "type": "object",
+          "description": "Права пользователя на доступ к разделам",
+          "properties": {
+            "basket": {
+              "type": "boolean",
+              "default": false
+            },
+            "archive": {
+              "type": "boolean",
+              "default": false
+            },
+            "clients": {
+              "type": "boolean",
+              "default": false
+            },
+            "reports": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "is_locked": {
+          "type": "boolean",
+          "default": false,
+          "description": "Ограниченный доступ пользователя"
+        },
+        "position": {
+          "type": "string",
+          "description": "Должность"
+        },
+        "dataitems": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Dataitems"
+            }
+          }
+        }
+      }
+    },
+    "AcountsActiveList": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "description": "Имя пользователя для для отображения",
+          "enum": [
+            "Иванов И."
+          ]
+        },
+        "is_admin": {
+          "type": "boolean",
+          "default": false
+        },
+        "logo_url": {
+          "type": "string",
+          "description": "Абсолютный путь к изображению",
+          "enum": [
+            "http://google.com/..."
+          ]
+        },
+        "storage_rights": {
+          "type": "object",
+          "description": "Права пользователя на доступ к разделам",
+          "properties": {
+            "basket": {
+              "type": "boolean",
+              "default": false
+            },
+            "members": {
+              "type": "boolean",
+              "default": false
+            },
+            "clients": {
+              "type": "boolean",
+              "default": false
+            },
+            "archive": {
+              "type": "boolean",
+              "default": false
+            },
+            "reports": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "active": {
+                "type": "boolean",
+                "default": false
+              },
+              "label": {
+                "type": "string",
+                "description": "Названия раздела на русском (для отображения)"
+              },
+              "name": {
+                "type": "string",
+                "description": "Название раздела системы"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Dataitems": {
+      "type": "object",
+      "description": "Контактная информация полбзователя",
+      "properties": {
+        "address": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "data": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "phone": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "number": {
+                "type": "string"
+              },
+              "extra_code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "email": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "data": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "web": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "data": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "AccountFormData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "full_name": {
+          "type": "string",
+          "description": "Имя пользователя для для отображения",
+          "enum": [
+            "Иванов И."
+          ]
+        },
+        "birth_date": {
+          "type": "string",
+          "description": "Дата рождения",
+          "enum": [
+            "10.10.1910"
+          ]
+        },
+        "logo": {
+          "type": "string",
+          "description": "ФАЙЛ изображения"
+        },
+        "first_name": {
+          "type": "string",
+          "description": "Имя пользователя",
+          "enum": [
+            "Иван"
+          ]
+        },
+        "middle_name": {
+          "type": "string",
+          "description": "Отчество",
+          "enum": [
+            "Иванович"
+          ]
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Фамилия пользователя",
+          "enum": [
+            "Иванов"
+          ]
+        },
+        "username": {
+          "type": "string",
+          "description": "Имя пользователя",
+          "enum": [
+            "admin"
+          ]
+        },
+        "password": {
+          "type": "string",
+          "description": "Пароль пользователя"
+        },
+        "is_locked_account": {
+          "type": "boolean",
+          "default": false
+        },
+        "info": {
+          "type": "string",
+          "description": "Информация о пользователе"
+        },
+        "storage_rights": {
+          "type": "object",
+          "description": "Права пользователя на доступ к разделам",
+          "properties": {
+            "basket": {
+              "type": "boolean",
+              "default": false
+            },
+            "archive": {
+              "type": "boolean",
+              "default": false
+            },
+            "clients": {
+              "type": "boolean",
+              "default": false
+            },
+            "reports": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "is_locked": {
+          "type": "boolean",
+          "default": false,
+          "description": "Ограниченный доступ пользователя"
+        },
+        "position": {
+          "type": "string",
+          "description": "Должность"
+        },
+        "dataitems": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Dataitems"
+            }
+          }
+        }
+      }
+    },
+    "AccountsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/Account"
+          }
+        }
+      }
+    },
+    "SignUp": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "middle_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "info": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateUserReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "owner": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Id создателя"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "middle_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "info": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "description": "DataTime"
+        },
+        "modified": {
+          "type": "string",
+          "description": "DataTime"
+        },
+        "user_created": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user_modified": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "legal_person": {
+          "type": "boolean",
+          "default": false
+        },
+        "deleted": {
+          "type": "boolean",
+          "default": false
+        },
+        "autologin_token": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string",
+          "default": null,
+          "description": "Абсолютный путь к изображению"
+        }
+      }
+    },
+    "UpdateAvatarReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "file": {
+          "type": "string",
+          "description": "Абсолютный путь к изображению"
+        }
+      }
+    },
+    "BoardsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/BoardItem"
+          }
+        }
+      }
+    },
+    "BoardItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "is_subprocess": {
+          "type": "boolean",
+          "default": false
+        },
+        "pos": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/ColumnItem"
+              }
+            }
+          }
+        },
+        "column_workflow_start": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "is_end_workflow": {
+              "type": "boolean",
+              "default": false
+            },
+            "is_start_workflow": {
+              "type": "boolean",
+              "default": false
+            },
+            "is_subprocess": {
+              "type": "boolean",
+              "default": false
+            },
+            "title": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "way_from_board": {
+              "type": "string",
+              "description": "Описание перехода на другую доску",
+              "enum": [
+                "Middle -> Промежуточный"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "BoardSingle": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "editMode": {
+          "type": "boolean",
+          "default": false
+        },
+        "pos": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "use_by_default": {
+          "type": "boolean",
+          "default": false
+        },
+        "title": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/ColumnItem"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ColumnItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "is_end_workflow": {
+          "type": "boolean",
+          "default": false
+        },
+        "is_start_workflow": {
+          "type": "boolean",
+          "default": false
+        },
+        "is_subprocess": {
+          "type": "boolean",
+          "default": false
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "way_from_board": {
+          "type": "string",
+          "description": "Описание перехода на другую доску",
+          "enum": [
+            "Middle -> Промежуточный"
+          ]
+        }
+      }
+    },
+    "NewColumnRequest": {
+      "type": "object",
+      "properties": {
+        "board": {
+          "type": "integer",
+          "format": "int64",
+          "description": "id доски"
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "NewColumnReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "board": {
+          "type": "integer"
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "SaveColumnRequest": {
+      "type": "object",
+      "properties": {
+        "board": {
+          "type": "integer",
+          "format": "int64",
+          "description": "id доски"
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "TransitionBoard": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "is_end_workflow": {
+            "type": "boolean"
+          },
+          "is_start_workflow": {
+            "type": "boolean"
+          },
+          "is_subprocess": {
+            "type": "boolean",
+            "default": false
+          },
+          "pos": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "target": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "board_title": {
+                "type": "string"
+              },
+              "column_title": {
+                "type": "string"
+              },
+              "column_type": {
+                "type": "string"
+              }
+            }
+          },
+          "transition_on_columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "active": {
+                  "type": "boolean"
+                },
+                "is_end_workflow": {
+                  "type": "boolean"
+                },
+                "is_start_workflow": {
+                  "type": "boolean"
+                },
+                "pos": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "way_from_board": {
+                  "type": "string",
+                  "default": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "AddTransitionRequest": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "integer"
+        },
+        "to": {
+          "type": "integer"
+        }
+      }
+    },
+    "AddTransitionReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "is_end_workflow": {
+          "type": "boolean"
+        },
+        "is_start_workflow": {
+          "type": "boolean"
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "from_column": {
+          "type": "integer"
+        },
+        "to_column": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "SubprocessBoard": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "pos": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "way_from_board": {
+            "type": "string",
+            "default": null
+          },
+          "subprocess": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/CreateSubprocessReply"
+              }
+            }
+          },
+          "subprocess_boards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "$ref": "#/definitions/CreateSubprocessReply"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "CreateSubprocessRequest": {
+      "type": "object",
+      "properties": {
+        "board_to": {
+          "type": "integer"
+        },
+        "column_from": {
+          "type": "integer"
+        },
+        "column": {
+          "type": "integer"
+        }
+      }
+    },
+    "CreateSubprocessReply": {
+      "type": "object",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/ColumnItem"
+              }
+            }
+          }
+        },
+        "target_column": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/ColumnItem"
+            }
+          }
+        },
+        "title": {
+          "type": "string",
+          "description": "Название доски, на которую осуществляется переход"
+        },
+        "id": {
+          "type": "integer",
+          "description": "Id доски, на которую осуществляется переход"
+        }
+      }
+    },
+    "BoardsAccounts": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "responsible_accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/Account"
+              }
+            }
+          }
+        }
+      }
+    },
+    "BoardAccountsRequest": {
+      "type": "object",
+      "properties": {
+        "columnId": {
+          "type": "integer"
+        },
+        "accountId": {
+          "type": "integer"
+        }
+      }
+    },
+    "BoardAccountAddReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "account": {
+          "type": "integer"
+        },
+        "account_info": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          }
+        }
+      }
+    },
+    "GetBoardDateFilter": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "description": "DataTime"
+        },
+        "end": {
+          "type": "string",
+          "description": "DataTime"
+        }
+      }
+    },
+    "GetBoard": {
+      "type": "object",
+      "properties": {
+        "allow_basket": {
+          "type": "boolean"
+        },
+        "allow_responsible": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "is_subprocess": {
+          "type": "boolean"
+        },
+        "is_closed": {
+          "type": "boolean",
+          "default": false
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/BoardColumn"
+              }
+            }
+          }
+        },
+        "column_workflow_start": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/ColumnItem"
+            }
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "label": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Полный путь к файлу иконки"
+              }
+            }
+          }
+        }
+      }
+    },
+    "BoardColumn": {
+      "type": "object",
+      "properties": {
+        "board": {
+          "type": "integer"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/Card"
+              }
+            }
+          }
+        },
+        "hovered": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "is_subprocess": {
+          "type": "boolean"
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "responsible_accounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/Account"
+              }
+            }
+          }
+        },
+        "title": {
+          "type": "string"
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "type": {
+          "type": "integer"
+        },
+        "new_cards": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "description": "id не проитанной карточки"
+          }
+        }
+      }
+    },
+    "SaveCardsListRequest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/Card"
+          }
+        }
+      }
+    },
+    "SaveCardsListReply": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "string",
+          "enum": [
+            "Список был сохранен"
+          ]
+        },
+        "removed_cards": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "description": "Список id"
+          }
+        },
+        "moved_to_target_cards": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "description": "Список id"
+          }
+        }
+      }
+    },
+    "Card": {
+      "type": "object",
+      "properties": {
+        "blocked": {
+          "type": "boolean",
+          "default": false
+        },
+        "color": {
+          "type": "string",
+          "default": "ffffff",
+          "enum": [
+            "ffffff"
+          ]
+        },
+        "boardId": {
+          "type": "integer"
+        },
+        "column": {
+          "type": "integer"
+        },
+        "contact": {
+          "type": "boolean"
+        },
+        "contact_name": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "description": "Data-time"
+        },
+        "deleted": {
+          "type": "boolean",
+          "default": false
+        },
+        "id": {
+          "type": "integer"
+        },
+        "is_last_position": {
+          "type": "boolean",
+          "default": false
+        },
+        "pos": {
+          "type": "integer"
+        },
+        "slug_id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "user_created": {
+          "type": "integer"
+        },
+        "user_modified": {
+          "type": "integer"
+        }
+      }
+    },
+    "ArchiveReply": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Месяц и год (Обьект по дате добавления в архив)"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "$ref": "#/definitions/Card"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ClientsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "more_info": {
+            "type": "string"
+          },
+          "type_face": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "group": {
+            "type": "integer"
+          },
+          "tag": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "ClientDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "owner": {
+          "type": "integer"
+        },
+        "user_created": {
+          "type": "integer"
+        },
+        "user_modified": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "boolean",
+          "default": false
+        },
+        "is_legal": {
+          "type": "boolean",
+          "default": true
+        },
+        "dataitems": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Dataitems"
+            }
+          }
+        },
+        "modified": {
+          "type": "string",
+          "description": "Дата последнего изменения"
+        },
+        "more_info": {
+          "type": "string"
+        },
+        "type_face": {
+          "type": "string",
+          "description": "Тип организации"
+        },
+        "created": {
+          "type": "string",
+          "description": "Date-time"
+        },
+        "personal_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/ClientEmployeesList"
+              }
+            }
+          }
+        },
+        "tag": {
+          "type": "integer",
+          "description": "id цвета"
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/ClientsRelationsItem"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ClientEmployeesList": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "middle_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "boolean",
+          "default": false
+        },
+        "link_person": {
+          "type": "integer",
+          "description": "Id клиента(организации)"
+        },
+        "position": {
+          "type": "string"
+        },
+        "user_created": {
+          "type": "integer"
+        },
+        "user_modified": {
+          "type": "integer"
+        },
+        "_full_name": {
+          "type": "string",
+          "description": "Полное имя для отображения"
+        },
+        "dataitems": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Dataitems"
+            }
+          }
+        },
+        "created": {
+          "type": "string",
+          "description": "Date-time"
+        },
+        "modified": {
+          "type": "string",
+          "description": "Date-time"
+        }
+      }
+    },
+    "UpdateClientRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Не обязательное поле"
+        },
+        "title": {
+          "type": "string",
+          "description": "Обязательное поле"
+        },
+        "type_face": {
+          "type": "string"
+        },
+        "more_info": {
+          "type": "string"
+        },
+        "dataitems": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Dataitems"
+            }
+          }
+        }
+      }
+    },
+    "CreateEmployeeRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Не обязательный параметр"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "middle_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "link_person": {
+          "type": "integer",
+          "description": "Id клиента(организации)"
+        },
+        "position": {
+          "type": "string"
+        },
+        "_full_name": {
+          "type": "string",
+          "description": "Полное имя для отображения"
+        },
+        "dataitems": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Dataitems"
+            }
+          }
+        }
+      }
+    },
+    "OrganizationType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Формируется при добавлении нового типа, не обязательный параметр"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "OrganizationTypeList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/OrganizationType"
+          }
+        }
+      }
+    },
+    "ClientsGroupList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/ClientsGroupItem"
+          }
+        }
+      }
+    },
+    "ClientsGroupItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "counter": {
+          "type": "integer",
+          "description": "Колличество клиентов, относящихся к группе"
+        },
+        "description": {
+          "type": "string",
+          "description": "Описание группы"
+        },
+        "clientsList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "$ref": "#/definitions/ClientsRelationsItem"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ClientsTagsItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string",
+          "description": "На русском"
+        },
+        "hex": {
+          "type": "string"
+        },
+        "counter": {
+          "type": "integer"
+        }
+      }
+    },
+    "ClientsTagsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/ClientsTagsItem"
+          }
+        }
+      }
+    },
+    "ClientsRelationsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#/definitions/ClientsRelationsItem"
+          }
+        }
+      }
+    },
+    "ClientsRelationsItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "more_info": {
+          "type": "string"
+        },
+        "type_face": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "group": {
+          "type": "integer"
+        },
+        "tag": {
+          "type": "integer"
+        }
+      }
+    },
+    "StorageList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Дата"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "$ref": "#/definitions/Card"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ModulesList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean",
+            "default": false
+          },
+          "label": {
+            "type": "string",
+            "description": "Названия раздела на русском (для отображения)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название раздела системы"
+          }
+        }
+      }
+    },
+    "UserModules": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer"
+        },
+        "storage_rights": {
+          "type": "object",
+          "description": "Права пользователя на доступ к разделам",
+          "properties": {
+            "basket": {
+              "type": "boolean",
+              "default": false
+            },
+            "members": {
+              "type": "boolean",
+              "default": false
+            },
+            "clients": {
+              "type": "boolean",
+              "default": false
+            },
+            "archive": {
+              "type": "boolean",
+              "default": false
+            },
+            "reports": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "active": {
+                "type": "boolean",
+                "default": false
+              },
+              "label": {
+                "type": "string",
+                "description": "Названия раздела на русском (для отображения)"
+              },
+              "name": {
+                "type": "string",
+                "description": "Название раздела системы"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

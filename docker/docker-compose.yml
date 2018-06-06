@@ -1,0 +1,90 @@
+version: '3'
+
+volumes:
+  static-front:
+  redis-data:
+
+networks:
+  rasa-production:
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    restart: always
+    networks:
+      - rasa-production
+    ports:
+      - "0.0.0.0:8078:80"
+    container_name: rasa-web
+    volumes:
+      - static-front:/opt/niceerp-front/dist
+      - ./rasa-board-server:/opt/niceerp-back
+    links:
+      - "back"
+    depends_on:
+      - "back"
+      - "front"
+    entrypoint: ['nginx', '-g', 'daemon off;']
+
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile_front
+      args:
+        - SOURCE_PATH=./niceerp-front
+        - WORK_PATH=/tmp/niceerp-front/
+    volumes:
+      - static-front:/opt/niceerp-front/dist
+    working_dir: /opt/niceerp-front
+    container_name: rasa-front
+    entrypoint: ['/bin/sh', '/tmp/front-after-build.sh']
+
+  back:
+    build:
+      context: .
+      dockerfile: Dockerfile_back
+      args:
+        - SOURCE_PATH=./rasa-board-server
+    restart: always
+    environment:
+      - DJANGO_SETTINGS_MODULE=test_project.settings
+      - HIDE_DEBUG_TOOLBAR=True
+      - REDIS_CONNECTION=redis://redis:6379/1
+      - SQL_LOGGING=0
+    volumes:
+      - ./rasa-board-server:/opt/niceerp-back
+    working_dir: /opt/niceerp-back
+    container_name: rasa-back
+    networks:
+      - rasa-production
+    links:
+      - "redis:redis"
+    depends_on:
+      - "redis"
+    expose:
+      - "2021"
+#    links:
+#      - "db"
+    entrypoint: ['/bin/sh', './run.sh']
+
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--port", "6379"]
+    hostname: redis
+    container_name: redis
+    networks:
+      - rasa-production
+    expose:
+      - "6379"
+    volumes:
+      - redis-data:/data
+
+#  db:
+#    image: mysql:latest
+#    env_file:
+#     .env
+#    volumes:
+#    - ./mysql:/var/lib/mysql
+#    container_name: rasa-db

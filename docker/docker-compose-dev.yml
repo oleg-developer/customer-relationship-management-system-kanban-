@@ -1,0 +1,120 @@
+version: '3.1'
+
+volumes:
+  static-front-dev:
+  redis-data-dev:
+  telegram-logging-bot-data:
+
+networks:
+  rasa-development:
+
+secrets:
+  telegram-logging-bot-token:
+    file: ~/docker-secrets/telegram-logging-bot-token
+  telegram-logging-bot-password:
+    file: ~/docker-secrets/telegram-logging-bot-password
+
+services:
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    restart: always
+    networks:
+      - rasa-development
+    ports:
+      - "0.0.0.0:8077:80"
+    container_name: rasa-web-dev
+    volumes:
+      - static-front-dev:/opt/niceerp-front/dist
+      - ./rasa-board-server-dev:/opt/niceerp-back
+    links:
+      - "back-dev:back"
+    depends_on:
+      - "back-dev"
+      - "front-dev"
+    entrypoint: ['nginx', '-g', 'daemon off;']
+
+  front-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile_front
+      args:
+        - SOURCE_PATH=./niceerp-front-dev
+        - WORK_PATH=/tmp/niceerp-front/
+    volumes:
+      - static-front-dev:/opt/niceerp-front/dist
+    working_dir: /opt/niceerp-front
+    container_name: rasa-front-dev
+    entrypoint: ['/bin/sh', '/tmp/front-after-build.sh']
+
+  back-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile_back
+      args:
+        - SOURCE_PATH=./rasa-board-server-dev
+    restart: always
+    environment:
+      - DJANGO_SETTINGS_MODULE=test_project.settings
+      - REDIS_CONNECTION=redis://redis:6379/1
+      - SQL_LOGGING=1
+    volumes:
+      - ./rasa-board-server-dev:/opt/niceerp-back
+    working_dir: /opt/niceerp-back
+    container_name: rasa-back-dev
+    networks:
+      - rasa-development
+    links:
+      - "redis-dev:redis"
+    depends_on:
+      - "redis-dev"
+    expose:
+      - "2021"
+#    links:
+#      - "db"
+    entrypoint: ['/bin/sh', './run.sh']
+
+  redis-dev:
+    image: redis:latest
+    command: ["redis-server", "--port", "6379"]
+    hostname: redis
+    container_name: redis-dev
+    networks:
+      rasa-development:
+        aliases:
+          - redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    expose:
+      - "6379"
+    volumes:
+      - redis-data-dev:/data
+
+  # See https://github.com/bogdandm/telegram-logging-bot
+  # Remove this section & top-level secrets if you don't need telegram logger bot
+  telegram-logging-bot-dev:
+    image: bogdandm/telegramloggingbot:latest
+    environment:
+      - TELEGRAM_TOKEN=/run/secrets/telegram-logging-bot-token
+      - TELEGRAM_ACCESS_PASSWORD=/run/secrets/telegram-logging-bot-password
+    volumes:
+      - telegram-logging-bot-data:/opt/telegram-logging-bot-data
+    working_dir: /opt/telegram-logging-bot-data
+    container_name: telegram-logging-bot-dev
+    networks:
+      - rasa-development
+    depends_on:
+      - "redis-dev"
+    entrypoint: python -m telegram_logging.bot
+    secrets:
+      - telegram-logging-bot-token
+      - telegram-logging-bot-password
+
+#  db:
+#    image: mysql:latest
+#    env_file:
+#     .env
+#    volumes:
+#    - ./mysql:/var/lib/mysql
+#    container_name: rasa-db

@@ -1,0 +1,169 @@
+POST http://localhost:8000/api/v1/auth/handshake/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+POST http://localhost:8000/api/v1/auth/login/
+Accept: */*
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Cache-Control: no-cache
+Content-Type: application/json
+
+{"username": "1@1.ru", "password": "qwerty12"}
+
+###
+
+GET http://localhost:8000/api/v1/clients/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/clients/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+{
+        "title": "4321",
+        "type_face": "Другой тип",
+        "inn": 12463423,
+        "dataitems": {
+            "email": [
+                {
+                    "data": "1@1.ru"
+                }
+            ]
+        }
+    }
+
+###
+
+GET http://localhost:8000/api/v1/clients/1/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/clients/type_faces/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/clients/employees/1/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/clients/1/relations/2/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/clients/groups/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+{
+  "name": "string",
+  "description": "string"
+}
+
+###
+
+GET http://localhost:8000/api/v1/clients/groups/1/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/clients/groups/1/clients/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/clients/2/group/1/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+DELETE http://localhost:8000/api/v1/clients/2/group/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/clients/tags/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/clients/tags/1/clients/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/clients/1/tag/1/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+DELETE http://localhost:8000/api/v1/clients/1/tag/
+Accept: application/json
+Cache-Control: no-cache
+Authorization: Token 8edd5896759bcb6b017b0c45c80e832768a1710f
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###

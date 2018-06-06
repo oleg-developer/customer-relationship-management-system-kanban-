@@ -1,0 +1,7 @@
+FROM nginx:latest
+MAINTAINER Kouts Vladimir <kvn@nicecode.biz>
+
+ENV TERM=xterm
+
+RUN rm /etc/nginx/conf.d/*
+ADD ./nginx/rasa-dev.conf /etc/nginx/conf.d/

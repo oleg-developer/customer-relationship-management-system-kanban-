@@ -1,0 +1,101 @@
+version: '3.1'
+
+volumes:
+  static-front-dev:
+  redis-data-local:
+  telegram-logging-bot-data:
+
+networks:
+  rasa-local:
+
+secrets:
+  telegram-logging-bot-token:
+    file: ~/docker-secrets/telegram-logging-bot-token
+  telegram-logging-bot-password:
+    file: ~/docker-secrets/telegram-logging-bot-password
+
+services:
+  web-local:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    restart: always
+    networks:
+      - rasa-local
+    ports:
+      - "127.0.0.1:8079:80"
+    container_name: rasa-web-local
+    volumes:
+      - static-front-dev:/opt/niceerp-front/dist
+      - ./..:/opt/niceerp-back
+    links:
+      - "back-local:back"
+    depends_on:
+      - "back-local"
+    entrypoint: ['nginx', '-g', 'daemon off;']
+
+  back-local:
+    build:
+      context: ./..
+      dockerfile: docker/Dockerfile_back
+      args:
+        - SOURCE_PATH=.
+    restart: always
+    environment:
+      - DJANGO_SETTINGS_MODULE=test_project.settings
+      - REDIS_CONNECTION=redis://redis:6379/1
+      - SQL_LOGGING=1
+    volumes:
+      - ./..:/opt/niceerp-back
+    working_dir: /opt/niceerp-back
+    container_name: rasa-back-local
+    networks:
+      - rasa-local
+    depends_on:
+      - "redis-local"
+    expose:
+      - "2021"
+#    links:
+#      - "db"
+    entrypoint: ['/bin/sh', './run.sh']
+
+  redis-local:
+    image: redis:latest
+    command: ["redis-server", "--port", "6379"]
+    container_name: redis-local
+    networks:
+      rasa-local:
+        aliases:
+          - redis
+    ports:
+      - "127.0.0.1:6380:6379"
+    expose:
+      - "6379"
+    volumes:
+      - redis-data-local:/data
+
+  telegram-logging-bot-local:
+    image: bogdandm/telegramloggingbot:latest
+    environment:
+      - TELEGRAM_TOKEN=/run/secrets/telegram-logging-bot-token
+      - TELEGRAM_ACCESS_PASSWORD=/run/secrets/telegram-logging-bot-password
+    volumes:
+      - telegram-logging-bot-data:/opt/telegram-logging-bot-data
+    working_dir: /opt/telegram-logging-bot-data
+    container_name: telegram-logging-bot-local
+    networks:
+      - rasa-local
+    depends_on:
+      - "redis-local"
+    entrypoint: python -m telegram_logging.bot
+    secrets:
+      - telegram-logging-bot-token
+      - telegram-logging-bot-password
+
+#  db:
+#    image: mysql:latest
+#    env_file:
+#     .env
+#    volumes:
+#    - ./mysql:/var/lib/mysql
+#    container_name: rasa-db

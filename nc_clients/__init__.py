@@ -1,0 +1,1 @@
+default_app_config = 'nc_clients.apps.NcClientsConfig'

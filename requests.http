@@ -1,0 +1,246 @@
+POST http://localhost:8000/api/v1/auth/handshake/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+POST http://localhost:8000/api/v1/auth/signin/
+Accept: */*
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Cache-Control: no-cache
+Content-Type: application/json
+
+{"username": "1@1.ru", "password": "qwerty12"}
+
+###
+
+GET http://localhost:8000/api/v1/auth/restore_session/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/auth/signout/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/accounts/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/accounts/1/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+PATCH http://localhost:8000/api/v1/accounts/1/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+{"first_name": "hello world"}
+
+###
+
+GET http://localhost:8000/api/v1/boards/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/boards/archive/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/boards/cards/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/card/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+{
+  "blocked": false,
+  "color": "ffffff",
+  "boardId": 1,
+  "column": 1,
+  "contact": true,
+  "contact_name": "string",
+  "deleted": false,
+  "is_last_position": false,
+  "pos": 0,
+  "slug_id": 0,
+  "title": "string",
+  "company": 1
+}
+
+###
+
+GET http://localhost:8000/api/v1/card/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/card/storage/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+GET http://localhost:8000/api/v1/admin/boards/extend/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/admin/boards/crate/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/admin/stages/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+
+###
+
+POST http://localhost:8000/api/v1/admin/boards/4/modules/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+[{
+    "user_id": 1,
+    "storage_rights": {
+    "basket": true,
+    "members": true,
+    "clients": true,
+    "archive": false
+  }
+}]
+
+###
+
+GET http://localhost:8000/api/v1/accounts/2/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+###
+
+POST http://localhost:8000/api/v1/accounts/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+{
+  "info": "hello world!",
+  "birthday": null,
+  "logo": null,
+  "first_name": "aaaa",
+  "middle_name": "ccccc",
+  "last_name": "bbbbbb",
+  "password": "qwerty12",
+  "storage_rights": {
+    "basket": true,
+    "members": true,
+    "clients": true,
+    "archive": false,
+    "reports": true
+  },
+  "is_locked": false,
+  "dataitems": {
+    "phone": [],
+    "email": [{
+        "data": "new@2.ru"
+    }],
+    "address": [{
+        "data": "Baiker street"
+    }],
+    "web": [{
+        "data": "http://example.com"
+    }]
+  }
+}
+
+###
+
+PATCH http://localhost:8000/api/v1/accounts/4/
+Accept: */*
+Cache-Control: no-cache
+Authorization: Token 426185a6dd4e8a18a021a220132e1d250a326b84
+Content-Type: application/json
+Accept-Encoding: utf-8
+
+{
+  "storage_rights": {
+    "basket": false,
+    "members": false,
+    "clients": false,
+    "archive": false,
+    "reports": true
+  }
+}
+
+###

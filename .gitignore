@@ -1,0 +1,61 @@
+*.pyc
+.idea
+*.sqlite3
+erp_core.egg-info
+__pycache__/
+*.py[cod]
+*$py.class
+media
+*.egg-info
+
+re
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# Django stuff:
+*.log
+.static_storage/
+.media/
+local_settings.py
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+.idea/
+.idea/workspace.xml
+workspace.xml
+log.sql
+log.sql.csv

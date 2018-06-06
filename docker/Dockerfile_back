@@ -1,0 +1,8 @@
+FROM python:3.5
+MAINTAINER Kouts Vladimir <kvn@nicecode.biz>
+ARG SOURCE_PATH
+ENV TERM=xterm
+
+RUN apt-get update && apt-get install -y git uwsgi && pip install uWSGI
+ADD $SOURCE_PATH/test_project/requirements.txt /tmp
+RUN pip install -r /tmp/requirements.txt

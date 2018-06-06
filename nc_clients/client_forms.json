@@ -1,0 +1,54 @@
+{
+  "phys": {
+    "fields": [
+      "inn",
+      "checking_account",
+      "address",
+      "birthday",
+      "passport_serial",
+      "passport_number",
+      "passport_date",
+      "passport_given_by",
+      "mail_code"
+    ]
+  },
+  "ip": {
+    "fields": [
+      "inn",
+      "checking_account",
+      "address",
+      "ip_name",
+      "fact_address",
+      "mail_address",
+      "ogrn",
+      "okpo",
+      "correspondent_account",
+      "bank",
+      "bik",
+      "document"
+    ]
+  },
+  "": {
+    "fields": [
+      "inn",
+      "checking_account",
+      "address",
+      "birthday",
+      "passport_serial",
+      "passport_number",
+      "passport_date",
+      "passport_given_by",
+      "mail_code",
+      "fact_address",
+      "mail_address",
+      "ogrn",
+      "okpo",
+      "correspondent_account",
+      "bank",
+      "bik",
+      "document",
+      "general_manager",
+      "kpp"
+    ]
+  }
+}

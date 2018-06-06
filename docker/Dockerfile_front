@@ -1,0 +1,17 @@
+FROM node:latest
+MAINTAINER Kouts Vladimir <kvn@nicecode.biz>
+ARG SOURCE_PATH
+ARG WORK_PATH
+ENV TERM=xterm
+
+RUN npm install webpack -g
+ADD $SOURCE_PATH/package.json $WORK_PATH
+ADD $SOURCE_PATH/package-lock.json $WORK_PATH
+WORKDIR $WORK_PATH
+RUN npm install
+
+ADD front-after-build.sh /tmp/
+COPY $SOURCE_PATH $WORK_PATH
+RUN npm run build && \
+    cp -a $WORK_PATH/dist /tmp/dist && \
+    rm -rf $WORK_PATH
